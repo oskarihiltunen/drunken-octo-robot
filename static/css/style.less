@@ -1,0 +1,93 @@
+@levelCount: 2;
+
+@gameWidth: 640px;
+@gameHeight: 320px;
+@levelLinkWidth: 100px;
+@levelLinkHeight: 140px;
+@levelLinkMarginRight: 20px;
+
+.glow(@color) {
+    -webkit-box-shadow: 0px 0px 25px 5px @color;
+    -moz-box-shadow: 0px 0px 25px 5px @color;
+    -ms-box-shadow: 0px 0px 25px 5px @color;
+    -o-box-shadow: 0px 0px 25px 5px @color;
+    box-shadow: 0px 0px 25px 5px @color;
+}
+
+.border-radius(@r) {
+    -webkit-border-radius: @r;
+    -moz-border-radius: @r;
+    -ms-border-radius: @r;
+    -o-border-radius: @r;
+    border-radius: @r;
+}
+
+.linear-gradient (@angle, @start, @end) {
+    background-image: -webkit-linear-gradient(@angle, @start, @end);
+    background-image: -moz-linear-gradient(@angle, @start, @end);
+    background-image: -o-linear-gradient(@angle, @start, @end);
+    background-image: linear-gradient(@angle, @start, @end);
+}
+
+#game {
+    width: @gameWidth;
+    height: @gameHeight;
+    background-color: #cceecc;
+    padding: 0;
+
+    #starting-screen {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+
+        #level-selection {
+            list-style-type: none;
+            padding-top:
+                @gameHeight / 2
+                - @levelLinkHeight / 2;
+            padding-left:
+                @gameWidth / 2
+                - @levelLinkWidth * @levelCount / 2
+                - @levelLinkMarginRight * @levelCount / 2;
+            width: 100%;
+            height: 100%;
+
+            & > li {
+                float: left;
+                text-align: center;
+
+                & > a {
+                    display: block;
+                    margin-right: @levelLinkMarginRight;
+                    width: @levelLinkWidth;
+                    height: @levelLinkHeight;
+                    border: 1px solid #333;
+                    .border-radius(5px);
+
+                    &:hover {
+                        .glow(white);
+                    }
+
+                    & > span {
+                        display: inline-block;
+                        margin-top: 10px;
+                        width: 100%;
+                        border-width: 1px 0;
+                        border-color: #666;
+                        border-style: solid;
+                        padding: 2px 0;
+                        .linear-gradient(90deg, #eeddaa, #fff9cc);
+                    }
+                }
+            }
+
+            #level-1 {
+                background-image: url(http://placehold.it/100x140);
+            }
+
+            #level-2 {
+                background-image: url(http://placekitten.com/100/140);
+            }
+        }
+    }
+}
