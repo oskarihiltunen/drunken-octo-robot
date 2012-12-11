@@ -3,7 +3,8 @@ var SCREEN_HEIGHT = window.innerHeight,
     DISPLAY_HEIGHT = 2 * 70 * Math.tan(45 / 2 * (Math.PI / 180)),
     DISPLAY_WIDTH = DISPLAY_HEIGHT * (SCREEN_WIDTH / SCREEN_HEIGHT),
     ARENA_HEIGHT = DISPLAY_HEIGHT * 0.7,
-    ARENA_WIDHT = DISPLAY_WIDTH * 0.4;
+    ARENA_WIDHT = DISPLAY_WIDTH * 0.4,
+    MAX_POWER = 100;
 
 // Variables for world and scene
 var world,
@@ -184,6 +185,10 @@ function moveBall() {
         1
     );
     velocityVector = target.vsub(ball.position).mult(speedBooster);
+    var power = Math.min(velocityVector.norm(), MAX_POWER);
+    velocityVector.normalize();
+    velocityVector = velocityVector.mult(power);
+    console.log(velocityVector.norm());
     ball.velocity.set(velocityVector.x, velocityVector.y, 0);
 }
 
