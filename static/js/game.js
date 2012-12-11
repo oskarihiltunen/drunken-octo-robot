@@ -16,7 +16,7 @@ var world,
 // Ball
 var ball,
     ballMass = 0.5,
-    ballLinearDamping = 0.005,
+    ballLinearDamping = 0.01,
     ballMesh,
     velocityVector = new CANNON.Vec3(),
     speedBooster = 1.5; // A scalar used to multiply the velocityVector.
