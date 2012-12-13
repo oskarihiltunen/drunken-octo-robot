@@ -37,11 +37,17 @@ var clickInfo = {
     userHasClicked: false
 };
 
-var sounds = {
-    ding: $('audio#ding').get(0),
-    boing: $('audio#boing').get(0),
-    punch: $('audio#punch').get(0)
-};
+var sounds = (new Audio()).canPlayType('audio/wav')
+    ? {
+        ding: 'static/sounds/ding.wav',
+        boing: 'static/sounds/boing.wav',
+        punch: 'static/sounds/punch.wav'
+    }
+    : {
+        ding: 'static/sounds/ding.mp3',
+        boing: 'static/sounds/boing.mp3',
+        punch: 'static/sounds/punch.mp3'
+    };
 
 function initGame() {
     initThree();
@@ -267,7 +273,7 @@ function getWorldY(mouseY) {
 
 // Plays given sound at given volume. Volume should be in range [0, 1].
 function playSound(soundName, volume) {
-    var sound = sounds[soundName];
+    var sound = new Audio(sounds[soundName]);
     sound.volume = volume;
     sound.play();
 }
