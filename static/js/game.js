@@ -91,7 +91,7 @@ function initThree() {
     // Camera
     camera = new THREE.PerspectiveCamera(45, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100);
     camera.position.z = 70;
-    scene.add( camera );
+    scene.add(camera);
 
     // create a point light
     var pointLight = new THREE.PointLight(0xFFFFFF);
@@ -99,6 +99,17 @@ function initThree() {
     pointLight.position.y = 50;
     pointLight.position.z = 130;
     scene.add(pointLight);
+
+    // create a plane
+    var planeMaterial = new THREE.MeshBasicMaterial({
+        map: THREE.ImageUtils.loadTexture('static/images/rink@2x.png')
+    });
+
+    var plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(80, 40),
+        planeMaterial
+    );
+    scene.add(plane);
 
     // Visualization of the cannon goal. Just to see where the goal is.
     var geometry = new THREE.CubeGeometry(6, 13, 9);
