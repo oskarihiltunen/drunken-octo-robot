@@ -246,7 +246,8 @@ function initEvents($canvas) {
 function initCannonEvents() {
     ball.addEventListener('collide', function (event) {
         var volume = ball.velocity.norm() / (MAX_POWER * SPEED_MULTIPLIER);
-        playSound('boing', volume);
+        var sound = (event.with === goal) ? 'ding' : 'boing';
+        playSound(sound, volume);
     });
 }
 
