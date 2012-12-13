@@ -19,7 +19,7 @@ var ball,
     ballLinearDamping = 0.01,
     ballMesh,
     velocityVector = new CANNON.Vec3(),
-    speedBooster = 1.5; // A scalar used to multiply the velocityVector.
+    SPEED_MULTIPLIER = 1.5; // A scalar used to multiply the velocityVector.
 
 // Objects
 var bodies = [],
@@ -30,6 +30,12 @@ var clickInfo = {
     x: 0,
     y: 0,
     userHasClicked: false
+};
+
+var sounds = {
+    ding: $('audio#ding').get(0),
+    boing: $('audio#boing').get(0),
+    punch: $('audio#punch').get(0)
 };
 
 function initGame() {
@@ -57,6 +63,8 @@ function initCannon() {
     var groundShape = new CANNON.Plane(normal);
     var groundBody = new CANNON.RigidBody(0, groundShape);
     world.add(groundBody);
+
+    initCannonEvents();
 }
 
 function initThree() {
@@ -157,8 +165,8 @@ function animate() {
 function updatePhysics() {
     // If mouse has been clicked, move the ball in the direction of the click.
     if (clickInfo.userHasClicked) {
-        clickInfo.userHasClicked = false;
         moveBall();
+        clickInfo.userHasClicked = false;
     }
 
     // Step the physics world
@@ -184,12 +192,15 @@ function moveBall() {
         getWorldY(clickInfo.y),
         1
     );
-    velocityVector = target.vsub(ball.position).mult(speedBooster);
+    velocityVector = target.vsub(ball.position);
     var power = Math.min(velocityVector.norm(), MAX_POWER);
     velocityVector.normalize();
-    velocityVector = velocityVector.mult(power);
-    console.log(velocityVector.norm());
+    velocityVector = velocityVector.mult(power).mult(SPEED_MULTIPLIER);
     ball.velocity.set(velocityVector.x, velocityVector.y, 0);
+
+    if (clickInfo.userHasClicked) {
+        playSound('punch', power / MAX_POWER);
+    }
 }
 
 function initEvents($canvas) {
@@ -199,6 +210,13 @@ function initEvents($canvas) {
             clickInfo.y = event.clientY;
             clickInfo.userHasClicked = true;
         }
+    });
+}
+
+function initCannonEvents() {
+    ball.addEventListener('collide', function (event) {
+        var volume = ball.velocity.norm() / (MAX_POWER * SPEED_MULTIPLIER);
+        playSound('boing', volume);
     });
 }
 
@@ -214,4 +232,11 @@ function getWorldY(mouseY) {
     var normalizedY = -(mouseY / SCREEN_HEIGHT) * 2 + 1;
     var worldY = normalizedY * DISPLAY_HEIGHT / 2;
     return worldY;
+}
+
+// Plays given sound at given volume. Volume should be in range [0, 1].
+function playSound(soundName, volume) {
+    var sound = sounds[soundName];
+    sound.volume = volume;
+    sound.play();
 }

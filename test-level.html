@@ -7,6 +7,18 @@
     </head>
 
     <body>
+        <audio id="ding" style="display: none;">
+            <source src="static/sounds/ding.mp3">
+            <source src="static/sounds/ding.wav">
+        </audio>
+        <audio id="boing" style="display: none;">
+            <source src="static/sounds/boing.mp3">
+            <source src="static/sounds/boing.wav">
+        </audio>
+        <audio id="punch" style="display: none;">
+            <source src="static/sounds/punch.mp3">
+            <source src="static/sounds/punch.wav">
+        </audio>
         <script src="static/js/jquery-1.8.2.min.js"></script>
         <script src="static/js/cannon.min.js"></script>
         <script src="static/js/three.min.js"></script>
@@ -17,5 +29,13 @@
             initLevel();
             animate();
         </script>
+        <p>
+            Sounds:
+            <ul>
+                 <li><a href="http://www.freesound.org/people/theredshore/sounds/83976/">punch.mp3</a> by <a href="http://www.freesound.org/people/theredshore/">theredshore</a></li>
+                 <li><a href="http://www.freesound.org/people/BranRainey/sounds/108737/">boing.wav</a> by <a href="http://www.freesound.org/people/BranRainey/">BranRainey</a></li>
+                 <li><a href="http://www.freesound.org/people/joedeshon/sounds/145805/">ding_01.wav</a> by <a href="http://www.freesound.org/people/joedeshon/">joedeshon</a></li>
+            </ul>
+        </p>
     </body>
 </html>
