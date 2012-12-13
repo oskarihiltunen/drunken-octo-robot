@@ -1,10 +1,10 @@
 @levelCount: 2;
 
-@gameWidth: 640px;
-@gameHeight: 320px;
+@gameWidth: 802px;
+@gameHeight: 402px;
 @levelLinkWidth: 100px;
 @levelLinkHeight: 140px;
-@levelLinkMarginRight: 20px;
+@levelLinkMargin: 20px;
 
 .glow(@color) {
     -webkit-box-shadow: 0px 0px 25px 5px @color;
@@ -32,7 +32,7 @@
 #game {
     width: @gameWidth;
     height: @gameHeight;
-    background-color: #cceecc;
+    background-image: url(../images/rink.png);
     padding: 0;
 
     #starting-screen {
@@ -48,7 +48,7 @@
             padding-left:
                 @gameWidth / 2
                 - @levelLinkWidth * @levelCount / 2
-                - @levelLinkMarginRight * @levelCount / 2;
+                - @levelLinkMargin * @levelCount;
             width: 100%;
             height: 100%;
 
@@ -58,7 +58,7 @@
 
                 & > a {
                     display: block;
-                    margin-right: @levelLinkMarginRight;
+                    margin: 0 @levelLinkMargin;
                     width: @levelLinkWidth;
                     height: @levelLinkHeight;
                     border: 1px solid #333;
