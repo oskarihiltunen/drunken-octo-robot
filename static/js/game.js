@@ -13,6 +13,11 @@ var world,
     scene,
     renderer;
 
+// Goal
+var goal,
+    goalMesh,
+    goalGraphic;
+
 // Ball
 var ball,
     ballMass = 0.5,
@@ -51,6 +56,12 @@ function initCannon() {
     world.broadphase = new CANNON.NaiveBroadphase();
     world.solver.iterations = 10;
 
+    // Goal
+    var goalShape = new CANNON.Box(new CANNON.Vec3(3, 6.5, 4.5));
+    goal = new CANNON.RigidBody(100, goalShape);
+    goal.position.set(ARENA_WIDHT * 0.6, 0, 4);
+    world.add(goal);
+
     // Ball
     var sphereShape = new CANNON.Sphere(1);
     ball = new CANNON.RigidBody(ballMass, sphereShape);
@@ -83,21 +94,36 @@ function initThree() {
     pointLight.position.z = 130;
     scene.add(pointLight);
 
-    // Ball
-    var radius = 1,
-        segments = 16,
-        rings = 16;
-    var sphereMaterial = new THREE.MeshLambertMaterial(
-    {
-      color: 0xCC0000
-    }
-    );
-    ballMesh = new THREE.Mesh(
-        new THREE.SphereGeometry(radius, segments, rings),
-        sphereMaterial
-    );
-    ballMesh.useQuaternion = true;
-    scene.add(ballMesh);
+    // Visualization of the cannon goal. Just to see where the goal is.
+    var geometry = new THREE.CubeGeometry(6, 13, 9);
+    var material = new THREE.MeshLambertMaterial( { color: 0xCC0000, wireframe: false } );
+    goalMesh = new THREE.Mesh(geometry, material);
+    goalMesh.useQuaternion = true;
+    scene.add(goalMesh);
+
+
+    var loader = new THREE.JSONLoader();
+
+    // Goal
+    loader.load('static/js/goal.js', function (geometry, materials) {
+        var material = new THREE.MeshFaceMaterial(materials);
+        goalGraphic = new THREE.Mesh(geometry, material);
+        goalGraphic.scale.x = goalGraphic.scale.y = goalGraphic.scale.z = 1.5;
+        goalGraphic.position.set(ARENA_WIDHT * 0.6, 0, -2);
+        goalGraphic.rotation.y = Math.PI;
+        goalGraphic.rotation.x = Math.PI / 2;
+        scene.add(goalGraphic);
+    });
+
+
+    // Ball with graphics
+    loader.load('static/js/ball.js', function (geometry, materials) {
+        var material = new THREE.MeshFaceMaterial(materials);
+        ballMesh = new THREE.Mesh(geometry, material);
+        ballMesh.scale.x = ballMesh.scale.y = ballMesh.scale.z = 1;
+        ballMesh.useQuaternion = true;
+        scene.add(ballMesh);
+    });
 
     // Renderer
     renderer = new THREE.CanvasRenderer();
@@ -177,8 +203,12 @@ function updatePhysics() {
         bodies[i].position.copy(visuals[i].position);
         bodies[i].quaternion.copy(visuals[i].quaternion);
     }
+
     ball.position.copy(ballMesh.position);
     ball.quaternion.copy(ballMesh.quaternion);
+
+    goal.position.copy(goalMesh.position);
+    goal.quaternion.copy(goalMesh.quaternion);
 }
 
 function render() {
