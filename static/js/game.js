@@ -2,8 +2,8 @@ var SCREEN_HEIGHT = window.innerHeight,
     SCREEN_WIDTH = window.innerWidth,
     DISPLAY_HEIGHT = 2 * 70 * Math.tan(45 / 2 * (Math.PI / 180)),
     DISPLAY_WIDTH = DISPLAY_HEIGHT * (SCREEN_WIDTH / SCREEN_HEIGHT),
-    ARENA_HEIGHT = DISPLAY_HEIGHT * 0.7,
-    ARENA_WIDHT = DISPLAY_WIDTH * 0.4,
+    RINK_HEIGHT = 40,
+    RINK_WIDTH = 80,
     MAX_POWER = 100;
 
 // Variables for world and scene
@@ -63,13 +63,13 @@ function initCannon() {
     world.solver.iterations = 10;
 
     // Goal
-    var goalShape = new CANNON.Box(new CANNON.Vec3(3, 6.5, 4.5));
+    var goalShape = new CANNON.Box(new CANNON.Vec3(1.85, 3.15, 2.25));
     goal = new CANNON.RigidBody(100, goalShape);
-    goal.position.set(ARENA_WIDHT * 0.6, 0, 4);
+    goal.position.set(30.8, 0, 2.1);
     world.add(goal);
 
     // Ball
-    var sphereShape = new CANNON.Sphere(1);
+    var sphereShape = new CANNON.Sphere(0.9);
     ball = new CANNON.RigidBody(ballMass, sphereShape);
     ball.position.set(0, 0, 1);
     ball.linearDamping = ballLinearDamping;
@@ -112,11 +112,11 @@ function initThree() {
     scene.add(plane);
 
     // Visualization of the cannon goal. Just to see where the goal is.
-    var geometry = new THREE.CubeGeometry(6, 13, 9);
+    var geometry = new THREE.CubeGeometry(3.70, 6.3, 4.5);
     var material = new THREE.MeshLambertMaterial( { color: 0xCC0000, wireframe: false } );
     goalMesh = new THREE.Mesh(geometry, material);
     goalMesh.useQuaternion = true;
-    scene.add(goalMesh);
+    //scene.add(goalMesh);
 
 
     var loader = new THREE.JSONLoader();
@@ -125,8 +125,8 @@ function initThree() {
     loader.load('static/js/goal.js', function (geometry, materials) {
         var material = new THREE.MeshFaceMaterial(materials);
         goalGraphic = new THREE.Mesh(geometry, material);
-        goalGraphic.scale.x = goalGraphic.scale.y = goalGraphic.scale.z = 1.5;
-        goalGraphic.position.set(ARENA_WIDHT * 0.6, 0, -2);
+        goalGraphic.scale.x = goalGraphic.scale.y = goalGraphic.scale.z = 0.77;
+        goalGraphic.position.set(29.3, 0, -0.5);
         goalGraphic.rotation.y = Math.PI;
         goalGraphic.rotation.x = Math.PI / 2;
         scene.add(goalGraphic);
@@ -137,7 +137,7 @@ function initThree() {
     loader.load('static/js/ball.js', function (geometry, materials) {
         var material = new THREE.MeshFaceMaterial(materials);
         ballMesh = new THREE.Mesh(geometry, material);
-        ballMesh.scale.x = ballMesh.scale.y = ballMesh.scale.z = 1;
+        ballMesh.scale.x = ballMesh.scale.y = ballMesh.scale.z = 0.8;
         ballMesh.useQuaternion = true;
         scene.add(ballMesh);
     });
@@ -155,20 +155,20 @@ function addBorders() {
     var borderColor = 0xaaaaaa;
     var borders = {
         top: {
-            dimensions: new CANNON.Vec3(ARENA_WIDHT, 1, 2),
-            position: new CANNON.Vec3(0, ARENA_HEIGHT / 2 + 1, 2)
+            dimensions: new CANNON.Vec3(RINK_WIDTH / 2, 1, 2),
+            position: new CANNON.Vec3(0, RINK_HEIGHT / 2 + 1, 2)
         },
         right: {
-            dimensions: new CANNON.Vec3(1, ARENA_HEIGHT / 2, 2),
-            position: new CANNON.Vec3(ARENA_WIDHT - 1, 0, 2)
+            dimensions: new CANNON.Vec3(1, RINK_HEIGHT / 2, 2),
+            position: new CANNON.Vec3(RINK_WIDTH / 2 + 1, 0, 2)
         },
         bottom: {
-            dimensions: new CANNON.Vec3(ARENA_WIDHT, 1, 2),
-            position: new CANNON.Vec3(0, -ARENA_HEIGHT / 2 - 1, 2)
+            dimensions: new CANNON.Vec3(RINK_WIDTH / 2, 1, 2),
+            position: new CANNON.Vec3(0, -RINK_HEIGHT / 2 - 1, 2)
         },
         left: {
-            dimensions: new CANNON.Vec3(1, ARENA_HEIGHT / 2, 2),
-            position: new CANNON.Vec3(-ARENA_WIDHT + 1, 0, 2)
+            dimensions: new CANNON.Vec3(1, RINK_HEIGHT / 2, 2),
+            position: new CANNON.Vec3(-RINK_WIDTH / 2 - 1, 0, 2)
         }
     };
 
