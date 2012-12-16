@@ -38,6 +38,10 @@ var clickInfo = {
     userHasClicked: false
 };
 
+// Variables for keeping track of the game
+var scored = false,
+    shotCount = 0;
+
 var sounds = (new Audio()).canPlayType('audio/wav')
     ? {
         ding: 'static/sounds/ding.wav',
@@ -50,7 +54,6 @@ var sounds = (new Audio()).canPlayType('audio/wav')
         punch: 'static/sounds/punch.mp3'
     };
 
-var scored = false;
 
 function initGame() {
     initThree();
@@ -242,6 +245,7 @@ function updatePhysics() {
     // If mouse has been clicked, move the ball in the direction of the click.
     if (clickInfo.userHasClicked) {
         moveBall();
+        shotCount += 1;
         clickInfo.userHasClicked = false;
     }
 
@@ -337,8 +341,12 @@ function isGoal() {
 }
 
 function showVictoryScreen() {
+    $('.shot-count').text(shotCount);
     $('.goal-text').removeClass('hidden');
     setTimeout(function () {
         $('.goal-text').addClass('hidden');
     }, 3000);
+    setTimeout(function () {
+        $('.victory-box').fadeIn();
+    }, 4000);
 }
