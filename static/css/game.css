@@ -1,0 +1,26 @@
+.goal-text {
+    width: 382px;
+    height: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -181px;
+
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+.hidden {
+    width: 0;
+    height: 0;
+    margin-top: 0;
+    margin-left: 0;
+
+    -moz-transform: rotate(-540deg);
+    -webkit-transform: rotate(-540deg);
+    -o-transform: rotate(-540deg);
+    transform: rotate(-540deg);
+}

@@ -12,7 +12,7 @@ var world,
     camera,
     scene,
     renderer,
-    loader = new THREE.JSONLoader();
+    loader;
 
 // Goal
 var goalBody,
@@ -50,6 +50,8 @@ var sounds = (new Audio()).canPlayType('audio/wav')
         punch: 'static/sounds/punch.mp3'
     };
 
+var scored = false;
+
 function initGame() {
     initThree();
     initCannon();
@@ -83,6 +85,8 @@ function initCannon() {
 function initThree() {
     // Scene
     scene = new THREE.Scene();
+
+    loader = new THREE.JSONLoader();
 
     // Camera
     camera = new THREE.PerspectiveCamera(45, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100);
@@ -127,29 +131,30 @@ function initThree() {
 function addBorders() {
     var borderMass = 100;
     var borderColor = 0xaaaaaa;
+    var borderWidth = 0.5;
     var borders = {
         top: {
-            dimensions: new CANNON.Vec3(RINK_WIDTH / 2, 1, 2),
-            position: new CANNON.Vec3(0, RINK_HEIGHT / 2 + 1, 2)
+            dimensions: new CANNON.Vec3(RINK_WIDTH / 2, borderWidth, 2),
+            position: new CANNON.Vec3(0, RINK_HEIGHT / 2 + borderWidth, 2)
         },
         right: {
-            dimensions: new CANNON.Vec3(1, RINK_HEIGHT / 2, 2),
-            position: new CANNON.Vec3(RINK_WIDTH / 2 + 1, 0, 2)
+            dimensions: new CANNON.Vec3(borderWidth, RINK_HEIGHT / 2, 2),
+            position: new CANNON.Vec3(RINK_WIDTH / 2 + borderWidth, 0, 2)
         },
         bottom: {
-            dimensions: new CANNON.Vec3(RINK_WIDTH / 2, 1, 2),
-            position: new CANNON.Vec3(0, -RINK_HEIGHT / 2 - 1, 2)
+            dimensions: new CANNON.Vec3(RINK_WIDTH / 2, borderWidth, 2),
+            position: new CANNON.Vec3(0, -RINK_HEIGHT / 2 - borderWidth, 2)
         },
         left: {
-            dimensions: new CANNON.Vec3(1, RINK_HEIGHT / 2, 2),
-            position: new CANNON.Vec3(-RINK_WIDTH / 2 - 1, 0, 2)
+            dimensions: new CANNON.Vec3(borderWidth, RINK_HEIGHT / 2, 2),
+            position: new CANNON.Vec3(-RINK_WIDTH / 2 - borderWidth, 0, 2)
         }
     };
 
     for (var i in borders) {
         if (borders.hasOwnProperty(i)) {
             var border = borders[i];
-            addBlock(border.dimensions, borderMass, border.position, borderColor);
+            addBlock(border.dimensions, borderMass, border.position, borderColor, false);
         }
     }
 }
@@ -196,23 +201,35 @@ function addGoal() {
     });
 }
 
-// Creates a block with given properties and and adds it to cannon.js world,
-// three.js scene and to arrays holding the cannon.js and three.js objects.
-function addBlock(dimensions, mass, position, color) {
+// Creates a block with given properties and adds it to cannon.js world and
+// three.js scene.
+// If updatePhysics is true also adds the block body and its visuals to arrays
+// holding the cannon.js and three.js objects.
+function addBlock(dimensions, mass, position, color, updatePhysics) {
+    if (typeof updatePhysics === 'undefined') {
+        updatePhysics = true;
+    }
+
     // Cannon
     var shape = new CANNON.Box(dimensions);
     var block = new CANNON.RigidBody(mass, shape);
     block.position.set(position.x, position.y, position.z);
     world.add(block);
-    bodies.push(block);
+    if (updatePhysics) {
+        bodies.push(block);
+    }
 
     // Scene
     var geometry = new THREE.CubeGeometry(2 * dimensions.x, 2 * dimensions.y, 2 * dimensions.z);
     var material = new THREE.MeshLambertMaterial( { color: color, wireframe: false } );
     var blockMesh = new THREE.Mesh(geometry, material);
     blockMesh.useQuaternion = true;
+    block.position.copy(blockMesh.position);
+    block.quaternion.copy(blockMesh.quaternion);
     scene.add(blockMesh);
-    visuals.push(blockMesh);
+    if (updatePhysics) {
+        visuals.push(blockMesh);
+    }
 }
 
 function animate() {
@@ -230,6 +247,13 @@ function updatePhysics() {
 
     // Step the physics world
     world.step(timeStep);
+
+    if (!scored) {
+        if (isGoal()) {
+            scored = true;
+            showVictoryScreen();
+        }
+    }
 
     // Copy coordinates from Cannon.js to Three.js
     for (var i = 0, max = bodies.length; i < max; i++) {
@@ -300,4 +324,21 @@ function playSound(soundName, volume) {
     var sound = new Audio(sounds[soundName]);
     sound.volume = volume;
     sound.play();
+}
+
+// Returns true if the ball is in goal.
+function isGoal() {
+    if (ball.position.x > 29.5 && ball.position.x < 32.65) {
+        if (ball.position.y > -3.5 && ball.position.y < 3.5) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function showVictoryScreen() {
+    $('.goal-text').removeClass('hidden');
+    setTimeout(function () {
+        $('.goal-text').addClass('hidden');
+    }, 3000);
 }
