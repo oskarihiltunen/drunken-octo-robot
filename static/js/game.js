@@ -11,11 +11,12 @@ var world,
     timeStep = 1/60,
     camera,
     scene,
-    renderer;
+    renderer,
+    loader = new THREE.JSONLoader();
 
 // Goal
-var goal,
-    goalMesh,
+var goalBody,
+    goalMass = 50,
     goalGraphic;
 
 // Ball
@@ -53,6 +54,7 @@ function initGame() {
     initThree();
     initCannon();
     addBorders();
+    addGoal();
 }
 
 function initCannon() {
@@ -61,12 +63,6 @@ function initCannon() {
     world.gravity.set(0, 0, -10);
     world.broadphase = new CANNON.NaiveBroadphase();
     world.solver.iterations = 10;
-
-    // Goal
-    var goalShape = new CANNON.Box(new CANNON.Vec3(1.85, 3.15, 2.25));
-    goal = new CANNON.RigidBody(100, goalShape);
-    goal.position.set(30.8, 0, 2.1);
-    world.add(goal);
 
     // Ball
     var sphereShape = new CANNON.Sphere(0.9);
@@ -93,14 +89,14 @@ function initThree() {
     camera.position.z = 70;
     scene.add(camera);
 
-    // create a point light
+    // Point light
     var pointLight = new THREE.PointLight(0xFFFFFF);
     pointLight.position.x = 10;
     pointLight.position.y = 50;
     pointLight.position.z = 130;
     scene.add(pointLight);
 
-    // create a plane
+    // Plane and graphics for the rink
     var planeMaterial = new THREE.MeshBasicMaterial({
         map: THREE.ImageUtils.loadTexture('static/images/rink@2x.png')
     });
@@ -110,28 +106,6 @@ function initThree() {
         planeMaterial
     );
     scene.add(plane);
-
-    // Visualization of the cannon goal. Just to see where the goal is.
-    var geometry = new THREE.CubeGeometry(3.70, 6.3, 4.5);
-    var material = new THREE.MeshLambertMaterial( { color: 0xCC0000, wireframe: false } );
-    goalMesh = new THREE.Mesh(geometry, material);
-    goalMesh.useQuaternion = true;
-    //scene.add(goalMesh);
-
-
-    var loader = new THREE.JSONLoader();
-
-    // Goal
-    loader.load('static/js/goal.js', function (geometry, materials) {
-        var material = new THREE.MeshFaceMaterial(materials);
-        goalGraphic = new THREE.Mesh(geometry, material);
-        goalGraphic.scale.x = goalGraphic.scale.y = goalGraphic.scale.z = 0.77;
-        goalGraphic.position.set(29.3, 0, -0.5);
-        goalGraphic.rotation.y = Math.PI;
-        goalGraphic.rotation.x = Math.PI / 2;
-        scene.add(goalGraphic);
-    });
-
 
     // Ball with graphics
     loader.load('static/js/ball.js', function (geometry, materials) {
@@ -180,6 +154,48 @@ function addBorders() {
     }
 }
 
+function addGoal() {
+    var sides = {
+        left: {
+            dimensions: new CANNON.Vec3(1.85, 0.1, 2.25),
+            offset: new CANNON.Vec3(0, -3.10, 0)
+        },
+        right: {
+            dimensions: new CANNON.Vec3(1.85, 0.1, 2.25),
+            offset: new CANNON.Vec3(0, 3.10, 0)
+        },
+        back: {
+            dimensions: new CANNON.Vec3(0.1, 3.00, 2.25),
+            offset: new CANNON.Vec3(1.85, 0, 0)
+        }
+    };
+
+    var goalShape = new CANNON.Compound();
+
+    for (var i in sides) {
+        if (sides.hasOwnProperty(i)) {
+            var side = sides[i];
+            var shape = new CANNON.Box(side.dimensions);
+            goalShape.addChild(shape, side.offset);
+        }
+    }
+
+    goalBody = new CANNON.RigidBody(goalMass, goalShape);
+    goalBody.position.set(30.8, 0, 2.1);
+    world.add(goalBody);
+
+    // Graphics
+    loader.load('static/js/goal.js', function (geometry, materials) {
+        var material = new THREE.MeshFaceMaterial(materials);
+        goalGraphic = new THREE.Mesh(geometry, material);
+        goalGraphic.scale.x = goalGraphic.scale.y = goalGraphic.scale.z = 0.77;
+        goalGraphic.position.set(29.3, 0, -0.5);
+        goalGraphic.rotation.y = Math.PI;
+        goalGraphic.rotation.x = Math.PI / 2;
+        scene.add(goalGraphic);
+    });
+}
+
 // Creates a block with given properties and and adds it to cannon.js world,
 // three.js scene and to arrays holding the cannon.js and three.js objects.
 function addBlock(dimensions, mass, position, color) {
@@ -223,9 +239,6 @@ function updatePhysics() {
 
     ball.position.copy(ballMesh.position);
     ball.quaternion.copy(ballMesh.quaternion);
-
-    goal.position.copy(goalMesh.position);
-    goal.quaternion.copy(goalMesh.quaternion);
 }
 
 function render() {
@@ -263,7 +276,7 @@ function initEvents($canvas) {
 function initCannonEvents() {
     ball.addEventListener('collide', function (event) {
         var volume = ball.velocity.norm() / (MAX_POWER * SPEED_MULTIPLIER);
-        var sound = (event.with === goal) ? 'ding' : 'boing';
+        var sound = (event.with === goalBody) ? 'ding' : 'boing';
         playSound(sound, volume);
     });
 }
