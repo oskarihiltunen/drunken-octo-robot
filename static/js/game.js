@@ -12,7 +12,8 @@ var world,
     camera,
     scene,
     renderer,
-    loader;
+    loader,
+    tween;
 
 // Goal
 var goalBody,
@@ -60,6 +61,28 @@ function initGame() {
     initCannon();
     addBorders();
     addGoal();
+    initCameraAnimation();
+}
+
+function initCameraAnimation() {
+    var position = { x : 100, z: 30 };
+    var target = { x : 0, z: 70 };
+    tween = new TWEEN.Tween(position).to(target, 5500);
+
+    tween.onUpdate(function() {
+        camera.position.x = position.x;
+        camera.position.z = position.z;
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+    });
+
+    tween.onComplete(function () {
+        initEvents();
+    });
+
+    tween.delay = 2500;
+    tween.easing(TWEEN.Easing.Exponential.InOut);
+    tween.start();
 }
 
 function initCannon() {
@@ -92,8 +115,8 @@ function initThree() {
     loader = new THREE.JSONLoader();
 
     // Camera
-    camera = new THREE.PerspectiveCamera(45, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100);
-    camera.position.z = 70;
+    camera = new THREE.PerspectiveCamera(45, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 1000);
+    camera.position.z = 30;
     scene.add(camera);
 
     // Point light
@@ -270,6 +293,7 @@ function updatePhysics() {
 }
 
 function render() {
+    TWEEN.update();
     renderer.render(scene, camera);
 }
 
@@ -291,8 +315,8 @@ function moveBall() {
     }
 }
 
-function initEvents($canvas) {
-    $canvas.on('click', function (event) {
+function initEvents() {
+    $('canvas').on('click', function (event) {
         if (Math.abs(ball.velocity.x) < 0.5 && Math.abs(ball.velocity.y) < 0.5) {
             clickInfo.x = event.clientX;
             clickInfo.y = event.clientY;
