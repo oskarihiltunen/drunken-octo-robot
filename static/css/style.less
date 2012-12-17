@@ -57,6 +57,7 @@
                 text-align: center;
 
                 & > a {
+                    position: relative;
                     display: block;
                     margin: 0 @levelLinkMargin;
                     width: @levelLinkWidth;
@@ -68,7 +69,7 @@
                         .glow(white);
                     }
 
-                    & > span {
+                    & > .name {
                         display: inline-block;
                         margin-top: 10px;
                         width: 100%;
@@ -77,6 +78,21 @@
                         border-style: solid;
                         padding: 2px 0;
                         .linear-gradient(90deg, #eeddaa, #fff9cc);
+                    }
+
+                    & > .score {
+                        position: absolute;
+                        display: inline-block;
+                        bottom: -1px;
+                        left: -1px;
+                        width: 100%;
+                        .linear-gradient(90deg, #aaddee, #ccf9ff);
+                        .border-radius(0 0 5px 5px);
+                        border: 1px solid #333;
+
+                        &::before {
+                            content: 'Paras: ';
+                        }
                     }
                 }
             }

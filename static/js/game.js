@@ -281,6 +281,7 @@ function updatePhysics() {
         if (isGoal()) {
             scored = true;
             showVictoryScreen();
+            saveScore();
         }
     }
 
@@ -379,4 +380,13 @@ function showVictoryScreen() {
     setTimeout(function () {
         $('.victory-box').fadeIn();
     }, 4000);
+}
+
+function saveScore() {
+    var scores = JSON.parse(localStorage.getItem('highscores')) || [];
+    var index = +$('body').data('level');
+    if (scores[index] == null || scores[index] > shotCount)
+        scores[index] = shotCount;
+    localStorage.setItem('highscores', JSON.stringify(scores));
+    alert(JSON.stringify(scores));
 }
