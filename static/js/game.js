@@ -371,7 +371,7 @@ function isGoal() {
 }
 
 function showVictoryScreen(isBest, previousBest) {
-    playSound('applause', 1);
+    playSound('applause', 0.5);
     $('.shot-count').text(shotCount);
     $('.goal-text').removeClass('hidden');
 
