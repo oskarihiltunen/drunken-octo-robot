@@ -319,6 +319,9 @@ function moveBall() {
 
 function initEvents() {
     $('canvas').on('click', function (event) {
+        if (scored)
+            return;
+
         if (Math.abs(ball.velocity.x) < 1.0 && Math.abs(ball.velocity.y) < 1.0) {
             clickInfo.x = event.clientX;
             clickInfo.y = event.clientY;
