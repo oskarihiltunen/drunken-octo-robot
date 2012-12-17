@@ -47,12 +47,14 @@ var sounds = (new Audio()).canPlayType('audio/wav')
     ? {
         ding: 'static/sounds/ding.wav',
         boing: 'static/sounds/boing.wav',
-        punch: 'static/sounds/punch.wav'
+        punch: 'static/sounds/punch.wav',
+        applause: 'static/sounds/applause.wav'
     }
     : {
         ding: 'static/sounds/ding.mp3',
         boing: 'static/sounds/boing.mp3',
-        punch: 'static/sounds/punch.mp3'
+        punch: 'static/sounds/punch.mp3',
+        applause: 'static/sounds/applause.mp3'
     };
 
 
@@ -317,7 +319,7 @@ function moveBall() {
 
 function initEvents() {
     $('canvas').on('click', function (event) {
-        if (Math.abs(ball.velocity.x) < 0.5 && Math.abs(ball.velocity.y) < 0.5) {
+        if (Math.abs(ball.velocity.x) < 1.0 && Math.abs(ball.velocity.y) < 1.0) {
             clickInfo.x = event.clientX;
             clickInfo.y = event.clientY;
             clickInfo.userHasClicked = true;
@@ -365,6 +367,7 @@ function isGoal() {
 }
 
 function showVictoryScreen() {
+    playSound('applause', 1);
     $('.shot-count').text(shotCount);
     $('.goal-text').removeClass('hidden');
     setTimeout(function () {
