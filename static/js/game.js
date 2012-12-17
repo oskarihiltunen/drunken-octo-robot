@@ -271,6 +271,11 @@ function updatePhysics() {
     if (clickInfo.userHasClicked) {
         moveBall();
         shotCount += 1;
+        $('.shot-count').text(shotCount);
+        if (shotCount == 1)
+            $('.shot-count-plural').addClass('hidden');
+        else
+            $('.shot-count-plural').removeClass('hidden');
         clickInfo.userHasClicked = false;
     }
 

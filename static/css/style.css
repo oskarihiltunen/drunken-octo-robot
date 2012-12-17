@@ -79,3 +79,14 @@
 #game #starting-screen #level-selection #level-2 {
   background-image: url(../images/level-2.png);
 }
+.actions-box {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  background-image: -webkit-linear-gradient(90deg, #ccddff, #cceeff);
+  background-image: -moz-linear-gradient(90deg, #ccddff, #cceeff);
+  background-image: -o-linear-gradient(90deg, #ccddff, #cceeff);
+  background-image: linear-gradient(90deg, #ccddff, #cceeff);
+  border-bottom: 1px solid #333;
+}

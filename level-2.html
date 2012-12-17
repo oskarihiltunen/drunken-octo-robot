@@ -4,6 +4,7 @@
     <head>
         <meta charset="utf-8">
         <title>Säbägolf</title>
+        <link rel="stylesheet" href="static/css/style.css">
         <link rel="stylesheet" href="static/css/game.css">
     </head>
 
@@ -19,6 +20,20 @@
             initLevel();
             animate();
         </script>
+
+        <div class="actions-box">
+            <ul class="actions">
+                <li><span class="shot-count">0</span> lyönti<span
+                    class="shot-count-plural">ä</span>.</li>
+                <li>
+                    <a href="level-2.html" class="button">Aloita alusta</a>
+                </li>
+                <li>
+                    <a href="index.html" class="button">Palaa takaisin</a>
+                </li>
+            </ul>
+        </div>
+
         <img class="goal-text hidden" src="static/images/goal-text.png" alt="Goal!">
         <div class="victory-box">
             <h1>Onnittelut!</h1>
