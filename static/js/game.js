@@ -280,8 +280,8 @@ function updatePhysics() {
     if (!scored) {
         if (isGoal()) {
             scored = true;
-            showVictoryScreen();
-            saveScore();
+            var args = saveScore();
+            showVictoryScreen.apply(null, args);
         }
     }
 
@@ -370,10 +370,18 @@ function isGoal() {
     return false;
 }
 
-function showVictoryScreen() {
+function showVictoryScreen(isBest, previousBest) {
     playSound('applause', 1);
     $('.shot-count').text(shotCount);
     $('.goal-text').removeClass('hidden');
+
+    if (!isBest)
+        $('.is-best').addClass('hidden');
+    else if (!previousBest)
+        $('.previous-best').addClass('hidden');
+    else
+        $('.previous-best-count').text(previousBest);
+
     setTimeout(function () {
         $('.goal-text').addClass('hidden');
     }, 3000);
@@ -385,8 +393,13 @@ function showVictoryScreen() {
 function saveScore() {
     var scores = JSON.parse(localStorage.getItem('highscores')) || [];
     var index = +$('body').data('level');
-    if (scores[index] == null || scores[index] > shotCount)
+    var isBest = false;
+    var previousBest = null;
+    if (scores[index] == null || scores[index] > shotCount) {
+        previousBest = scores[index];
         scores[index] = shotCount;
+        isBest = true;
+    }
     localStorage.setItem('highscores', JSON.stringify(scores));
-    alert(JSON.stringify(scores));
+    return [isBest, previousBest];
 }

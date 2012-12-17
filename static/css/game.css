@@ -14,22 +14,13 @@
 }
 
 .hidden {
-    width: 0;
-    height: 0;
-    margin-top: 0;
-    margin-left: 0;
-
-    -moz-transform: rotate(-540deg);
-    -webkit-transform: rotate(-540deg);
-    -o-transform: rotate(-540deg);
-    transform: rotate(-540deg);
+    display: none;
 }
 
 .victory-box {
     display: none;
     padding: 20px;
     width: 300px;
-    height: 140px;
     text-align: center;
     background-color: rgba(230, 230, 230, 1.0);
     position: absolute;
