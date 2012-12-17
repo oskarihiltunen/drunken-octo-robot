@@ -392,7 +392,7 @@ function showVictoryScreen(isBest, previousBest) {
 
 function saveScore() {
     var scores = JSON.parse(localStorage.getItem('highscores')) || [];
-    var index = +$('body').data('level');
+    var index = +$('body').data('level') - 1;
     var isBest = false;
     var previousBest = null;
     if (scores[index] == null || scores[index] > shotCount) {
