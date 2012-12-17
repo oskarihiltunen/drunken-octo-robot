@@ -1,0 +1,45 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Säbägolf</title>
+        <link rel="stylesheet" href="static/css/game.css">
+    </head>
+
+    <body data-level="2">
+        <script src="static/js/jquery-1.8.2.min.js"></script>
+        <script src="static/js/cannon.min.js"></script>
+        <script src="static/js/three.min.js"></script>
+        <script src="static/js/tween.min.js"></script>
+        <script src="static/js/game.js"></script>
+        <script src="static/js/level-2.js"></script>
+        <script>
+            initGame();
+            initLevel();
+            animate();
+        </script>
+        <img class="goal-text hidden" src="static/images/goal-text.png" alt="Goal!">
+        <div class="victory-box">
+            <h1>Onnittelut!</h1>
+            <p>Sait maalin <span class="shot-count"></span> lyönnillä.</p>
+            <p class="is-best">
+                Tämä on paras tuloksesi<span class="previous-best"> (edellinen
+                oli <span class="previous-best-count"></span>)</span>!
+            </p>
+            <ul class="actions">
+                <li><a href="test-level.html" class="button">Pelaa uudestaan</a></li>
+                <li><a href="index.html" class="button">Palaa takaisin</a></li>
+            </ul>
+        </div>
+        <p>
+            Sounds:
+            <ul>
+                 <li><a href="http://www.freesound.org/people/theredshore/sounds/83976/">punch.mp3</a> by <a href="http://www.freesound.org/people/theredshore/">theredshore</a></li>
+                 <li><a href="http://www.freesound.org/people/BranRainey/sounds/108737/">boing.wav</a> by <a href="http://www.freesound.org/people/BranRainey/">BranRainey</a></li>
+                 <li><a href="http://www.freesound.org/people/joedeshon/sounds/145805/">ding_01.wav</a> by <a href="http://www.freesound.org/people/joedeshon/">joedeshon</a></li>
+                 <li><a href="http://soundbible.com/988-Applause.html">applause.wav</a> by Mike Koenig</li>
+            </ul>
+        </p>
+    </body>
+</html>
