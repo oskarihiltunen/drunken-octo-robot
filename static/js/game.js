@@ -66,6 +66,10 @@ function initGame() {
     initCameraAnimation();
 }
 
+function getLevelNumber() {
+    return +$('body').data('level') - 1;
+}
+
 function initCameraAnimation() {
     var position = { x : 100, z: 30 };
     var target = { x : 0, z: 70 };
@@ -397,7 +401,7 @@ function showVictoryScreen(isBest, previousBest) {
 
 function saveScore() {
     var scores = JSON.parse(localStorage.getItem('highscores')) || [];
-    var index = +$('body').data('level') - 1;
+    var index = getLevelNumber();
     var isBest = false;
     var previousBest = null;
     if (scores[index] == null || scores[index] > shotCount) {
