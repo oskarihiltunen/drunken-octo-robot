@@ -285,6 +285,7 @@ function updatePhysics() {
 
     // Step the physics world
     world.step(timeStep);
+    ball.velocity.z = 0; // Make sure ball wont bounce of the rink.
 
     if (!scored) {
         if (isGoal()) {
