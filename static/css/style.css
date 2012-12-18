@@ -74,7 +74,7 @@
   content: 'Paras: ';
 }
 #game #starting-screen #level-selection #level-1 {
-  background-image: url(http://placehold.it/100x140);
+  background-image: url(../images/level-1.png);
 }
 #game #starting-screen #level-selection #level-2 {
   background-image: url(../images/level-2.png);
