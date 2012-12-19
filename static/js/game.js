@@ -366,7 +366,7 @@ function getWorldY(mouseY) {
 // Plays given sound at given volume. Volume should be in range [0, 1].
 function playSound(soundName, volume) {
     var sound = new Audio(sounds[soundName]);
-    sound.volume = volume;
+    sound.volume = Math.max(0, Math.min(1, volume)); // Enforce range [0, 1].
     sound.play();
 }
 
