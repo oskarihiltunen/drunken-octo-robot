@@ -58,7 +58,7 @@
   display: inline-block;
   bottom: -1px;
   left: -1px;
-  width: 100%;
+  width: 100px;
   background-image: -webkit-linear-gradient(90deg, #aaddee, #ccf9ff);
   background-image: -moz-linear-gradient(90deg, #aaddee, #ccf9ff);
   background-image: -o-linear-gradient(90deg, #aaddee, #ccf9ff);
